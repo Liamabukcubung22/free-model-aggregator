@@ -3,77 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Model Aggregator — ness22.ai</title>
+<title>Free Model Aggregator — the best free AI models, one API</title>
 <style>
-  :root { --ink: #141414; --muted: #5c5c5c; --line: #e2e2e2; --accent: #0b6e4f; --soft: #f4f7f5; }
-  * { box-sizing: border-box; }
-  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 680px; margin: 0 auto; padding: 48px 20px 64px; color: var(--ink); line-height: 1.65; }
-  h1 { font-size: 32px; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.02em; }
-  h2 { font-size: 19px; margin: 36px 0 10px; letter-spacing: -0.01em; }
-  p { margin: 10px 0; }
-  .tag { color: var(--muted); }
-  .score { display: flex; gap: 12px; margin: 28px 0; flex-wrap: wrap; }
-  .score .box { flex: 1 1 120px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .score .num { font-size: 30px; font-weight: 750; line-height: 1.1; }
-  .score .lbl { color: var(--muted); font-size: 13px; margin-top: 2px; }
-  .score .num small { font-size: 16px; font-weight: 600; color: var(--muted); }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
-  th { color: var(--muted); font-weight: 600; }
-  td.num, th.num { text-align: right; }
-  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 20px 0; }
-  .card h3 { margin: 0 0 6px; font-size: 15px; }
-  .card p { margin: 6px 0; font-size: 14.5px; }
-  code { background: #f2f2f2; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
-  a.button { display: inline-block; background: var(--accent); color: #fff; padding: 13px 22px; border-radius: 10px; text-decoration: none; font-weight: 650; margin-top: 8px; }
-  a.button:hover { background: #095c42; }
-  .cta { text-align: center; margin: 36px 0 12px; }
-  .fine { font-size: 13px; color: var(--muted); text-align: center; }
-  ul { padding-left: 20px; margin: 8px 0; }
-  li { margin: 6px 0; }
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 48px auto; padding: 0 16px; line-height: 1.6; color: #1a1a1a; }
+  h1 { font-size: 28px; }
+  .cta { display: inline-block; margin-top: 16px; padding: 12px 20px; background: #111; color: #fff; text-decoration: none; border-radius: 8px; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
 </style>
 </head>
 <body>
 <h1>Free Model Aggregator</h1>
-<p class="tag">An entry for the make.fun bounty <strong>“The best free AI model aggregator”</strong> by <strong>ness22.ai</strong>.</p>
-
-<p>One small Python program (standard library only, no installs) that serves every request with the best free model it can get. It has no model of its own — every answer comes from one of the ten free-tier providers: it ranks them by quality, translates each request faithfully into the serving provider’s wire, fails over automatically when a free budget runs out, and answers in the wire the client used — JSON or streaming.</p>
-
-<div class="score">
-  <div class="box"><div class="num">99<small> / 100</small></div><div class="lbl">Practice-trial score, all three trials</div></div>
-  <div class="box"><div class="num">20<small> / 20</small></div><div class="lbl">Requests valid, every trial</div></div>
-  <div class="box"><div class="num">24 · 23 · 25</div><div class="lbl">Upstream calls (trial-0 · 1 · 2)</div></div>
-</div>
-
-<h2>Practice-trial results</h2>
-<table>
-  <tr><th>Trial</th><th class="num">Score</th><th class="num">Quality</th><th class="num">Served</th><th class="num">Wire</th><th class="num">Failover</th><th class="num">Catalog</th><th class="num">Calls</th></tr>
-  <tr><td>trial-0</td><td class="num"><strong>99</strong></td><td class="num">99</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">24</td></tr>
-  <tr><td>trial-1</td><td class="num"><strong>99</strong></td><td class="num">99</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">23</td></tr>
-  <tr><td>trial-2</td><td class="num"><strong>99</strong></td><td class="num">99</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">25</td></tr>
-</table>
-<p class="tag">Quality 99 is the ceiling those trials allow — the best model’s provider can serve at most 10 requests at its top rating, and even an offline optimum with full knowledge of every budget still scores 99. Scores tie at 99, so the ranking is decided by upstream calls: this router spends 10 fewer of them across the three trials than plain best-rating routing (26 · 28 · 28).</p>
-
-<h2>How it saves calls without risking quality</h2>
-<div class="card">
-  <h3>1 · Fresh-provider bonus</h3>
-  <p>A provider never called yet ranks a little higher, so the first call spreads over the providers instead of queuing behind a top provider whose budget is about to be spent on a scheduled failure or an outage.</p>
-</div>
-<div class="card">
-  <h3>2 · Nine-success cap</h3>
-  <p>A provider that already answered nine requests is not offered again — past that point its budget is nearly spent and the next call is likely a refusal.</p>
-</div>
-<div class="card">
-  <h3>3 · Quality guard</h3>
-  <p>A cheaper pick is only taken while the earned score projected for the rest of the workload stays safely above the quality-99 threshold. Saving a call never risks the quality column. Tested on 200 freshly drawn instances from the kit’s own generator: quality 99 on all 200, zero unserved requests.</p>
-</div>
-
-<h2>Deterministic by design</h2>
-<p>No wall clock, no unseeded randomness in any request or response. The state export is byte-for-byte identical across runs — the replay check the final phase requires. Source: <code>main.py</code> in this repository. MIT licensed.</p>
-
-<div class="cta">
-  <a class="button" href="https://make.fun/r/jxspwz52">Try make.fun — free AI model aggregator entry by ness22.ai</a>
-  <p class="fine">Built for the make.fun bounty <code>free-model-aggregator-01</code>. No model of its own — every answer comes from one of the ten free providers.</p>
-</div>
+<p>One API that serves every request with the best free model it can get —
+OpenAI Chat Completions and Anthropic Messages, in JSON and streaming —
+routed across ten free-tier providers, with failover when a provider
+refuses.</p>
+<p>Built for the make.fun bounty
+<strong>“The best free AI model aggregator”</strong>. The entry is one
+Python 3.13 program (<code>main.py</code>, standard library only):
+run <code>python3 main.py --list</code> to see the catalog of free models
+it serves.</p>
+<p>Try make.fun and build your own agent:</p>
+<p><a class="cta" href="https://make.fun/r/jxspwz52">Join make.fun</a></p>
 </body>
 </html>
